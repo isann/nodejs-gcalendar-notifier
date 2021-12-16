@@ -42,7 +42,7 @@ main();
 function dialog(title, message, callback) {
   const child = require('child_process').spawn('osascript', [
     '-e',
-    `display dialog "${message}" with title "${title}" with text buttons {"ok"} default button 1`
+     `display dialog "${message}" with title "${title}" with text buttons {"OK"} default button 1`
   ], {
     env: {
       'PATH': '/usr/bin'
