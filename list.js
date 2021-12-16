@@ -13,8 +13,22 @@ const TOKEN_PATH = 'token.json';
 // Whether the scheduled time is smaller than this.
 const THRESHOLD = 60 // min
 
+// Process lock file
+const LOCK_FILE_PATH = '.lock'
 
 function main() {
+
+  // Check lock file
+  if (fs.existsSync(LOCK_FILE_PATH)) {
+    console.debug('exist lock file.');
+    return;
+  }
+
+  // Create lock file
+  fs.writeFile(LOCK_FILE_PATH, '', (err) => {
+    if (err) return console.error(err);
+  });
+
   // Load client secrets from a local file.
   fs.readFile('credentials.json', (err, content) => {
     if (err) return console.log('Error loading client secret file:', err);
@@ -25,8 +39,7 @@ function main() {
 
 main();
 
-
-function dialog(title, message) {
+function dialog(title, message, callback) {
   const child = require('child_process').spawn('osascript', [
     '-e',
     `display dialog "${message}" with title "${title}" with text buttons {"ok"} default button 1`
@@ -44,6 +57,9 @@ function dialog(title, message) {
   child.on('close', (code) => {
     console.log(`child process exited with code ${code}`);
     if (code === 0) {
+      if (callback) {
+        callback()
+      }
       console.log('success');
     } else {
       console.log('failed')
@@ -125,14 +141,20 @@ function listEvents(auth) {
         const start = event.start.dateTime || event.start.date;
         data += `${start} - ${event.summary}\n\n`
         console.log(`${start} - ${event.summary}`);
+        // Notify or not
         let diff = moment(start).diff(new Date(), 'minutes');
         if (diff <= THRESHOLD) {
           isNotifier = true;
         }
       });
       if (isNotifier) {
-        dialog('Schedule List', data)
+        dialog('Schedule List', data, function () {
+          // Delete lock file
+          fs.unlinkSync(LOCK_FILE_PATH);
+        })
       } else {
+        // Delete lock file
+        fs.unlinkSync(LOCK_FILE_PATH);
         console.debug('not dialog');
       }
     } else {
