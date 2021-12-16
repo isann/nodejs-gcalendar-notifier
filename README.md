@@ -18,4 +18,5 @@ node list.js
 
 # Reference
 [gcp-sample/calendar at main · Thirosue/gcp-sample](https://github.com/Thirosue/gcp-sample/tree/main/calendar)
+
 [Google CalendarにAPI連携（スケジュール一覧取得 / スケジュール作成 / スケジュール削除）する（Node.js） - Qiita](https://qiita.com/takeshi_hirosue/items/f0cf49b3969a03ab6988)
