@@ -15,6 +15,12 @@ Execute the following command.
 node list.js 
 ```
 
+# Note
+## cron setting
+```
+* * * * * cd /path/to/gcalendar-notifier && /path/to/node /path/to/gcalendar-notifier/list.js
+```
+
 
 # Reference
 [gcp-sample/calendar at main · Thirosue/gcp-sample](https://github.com/Thirosue/gcp-sample/tree/main/calendar)
