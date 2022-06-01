@@ -142,8 +142,9 @@ function listEvents(auth) {
         data += `${start} - ${event.summary}\n\n`
         console.log(`${start} - ${event.summary}`);
         // Notify or not
+        // 開始時間が現在時間よりも未来であり、 60 分以内に開始されるもの
         let diff = moment(start).diff(new Date(), 'minutes');
-        if (diff <= THRESHOLD) {
+        if (0 <= diff && diff <= THRESHOLD) {
           isNotifier = true;
         }
       });
